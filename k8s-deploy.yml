@@ -1,0 +1,37 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+ name: pippython
+spec:
+ replicas: 2
+ strategy: 
+    type: Recreate
+ selector: 
+   matchLabels: 
+     app: pippython
+ template:
+  metadata:
+   name: pippythonpod
+   labels:
+     app: pippython	 
+  spec: 
+    containers:
+    - name: pippythoncontainer
+      image: vinothkumarselvaarasan/python-docker
+      imagePullPolicy: Always
+      ports:
+      - containerPort: 8080
+---
+apiVersion: v1
+kind: Service
+metadata:
+ name: pippythonsvc
+spec:
+  type: LoadBalancer
+  selector:
+   app: pippython
+  ports:
+   - port: 80
+     targetPort: 5000
+...
